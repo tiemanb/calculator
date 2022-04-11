@@ -35,21 +35,52 @@
 
     </div>
     <script>
+        let eval = {
+            step:1,
+            left:'1',
+            right:'1',
+        };
         let screen = document.querySelector(".screen");
         // to do: loop through and add event listeners for each Number button
         let numbers = Array.from(document.getElementsByClassName('num'));
-
+        console.log(numbers);
+    
+        //adds abilituy to type numbers with UI keypad 
+        //handles calculator state logic as well
+        //if screen has id attribute, reset number string, else concat
+        //this allows the number to reset on screen/the program can discern between l and r operands 
+        numbers.forEach(n=>n.addEventListener('click', (e)=>{
+            if(eval.step == 1){
+                if(screen.textContent == '0'){
+                    screen.textContent = n.textContent;
+                    eval.left = n.textContent;
+                }else {
+                    screen.textContent += n.textContent;
+                    eval.left += n.textContent;
+                }
+            }else{
+                if(screen.hasAttribute("id")){
+                    screen.textContent = n.textContent;
+                    screen.removeAttribute('id');
+                    eval.right = n.textContent;
+                }else{
+                    screen.textcontent +=n.textContent;
+                    eval.right+=n.textContent;
+                }
+            } 
+        }));
+        
         let ac= document.querySelector(".ac");
         ac.addEventListener("click", (e)=>{
             screen.textContent = '0';
         })
         let one = document.querySelector(".one button");
-        one.addEventListener('click',(e)=>{
+        /*one.addEventListener('click',(e)=>{
             
             if(screen.textContent == '0'){
                 screen.textContent = '1';
             }else screen.textContent += '1';
-        });
+        });*/
         /*      
         <button class="button">+/-</div>
         <button class="button">%</div>
