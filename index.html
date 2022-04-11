@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class = "container">
+        <div class="screen"><p>0</p></div>
+        <div class="keyboard">
+            <div class="button ac"><button>AC</button></div>
+            <div class="button negate"><button>+/-</button></div>
+            <div class="button modulo"><button>%</button></div>
+            <div class="button divide"><button>/</button></div>
+            <div class="button num one"><button>1</button></div>
+            <div class="button num 2"><button>2</button></div>
+            <div class="button num 3"><button>3</button></div>
+            <div class="button multiply"><button>*</button></div>
+            <div class="button num 4"><button>4</button></div>
+            <div class="button num 5"><button>5</button></div>
+            <div class="button num 6"><button>6</button></div>
+            <div class="button minus"><button>-</button></div>
+            <div class="button num 7"><button>7</button></div>
+            <div class="button num 8"><button>8</button></div>
+            <div class="button num 9"><button>9</button></div>
+            <div class="button plus"><button>+</button></div>
+            <div class="button num 0"><button>0</button></div>
+            <div class="button"><button></button></div>
+            <div class="button decimal"><button>.</button></div>
+            <div class="button evaluate"><button>=</button></div>    
+        </div>
+
+    </div>
+    <script>
+        let screen = document.querySelector(".screen");
+        // to do: loop through and add event listeners for each Number button
+        let numbers = Array.from(document.getElementsByClassName('num'));
+
+        let ac= document.querySelector(".ac");
+        ac.addEventListener("click", (e)=>{
+            screen.textContent = '0';
+        })
+        let one = document.querySelector(".one button");
+        one.addEventListener('click',(e)=>{
+            
+            if(screen.textContent == '0'){
+                screen.textContent = '1';
+            }else screen.textContent += '1';
+        });
+        /*      
+        <button class="button">+/-</div>
+        <button class="button">%</div>
+        <button class="button">/</div> 
+        <div class="button">+/-</div>
+        <div class="button">%</div>
+        <div class="button">/</div> 
+        <div class="button">1</div>
+        <div class="button">2</div>
+        <div class="button">3</div>
+        <div class="button">*</div>
+        <div class="button">4</div>
+        <div class="button">5</div>
+        <div class="button">6</div>
+        <div class="button">-</div>
+        <div class="button">7</div>
+        <div class="button">8</div>
+        <div class="button">9</div>
+        <div class="button">+</div>
+        <div class="button">0</div>
+        <div class="button">.</div>
+        <div class="button">=</div>*/
+        //write a program that takes input from a UI of 19 html buttons, and creates and evaluates basic math expressions
+        //the expressions will only be 2 numbers as left and right operands, and operator inbetween
+        //buttons are: 0-9 numbers and + - * / % operators, and = . AC negation(+/-) special buttons 
+        //every time a number button is pressed, it is shown in the display 
+        //numbers pressed repeatedly build up a bigger number
+        //the program tracks the current state of the overall expression, and buttons act differently depending on which stage the program is on
+        //the first number you input on an empty expression is step 1, the left operand
+        //when you press an operator button it moves to step 2, putting operator into expression, then recieving the right operand
+        //if the expression is full and you press an operator button, the expression result is 
+        //evaluated, then the expression is reset to step 2, with the previous result as the new left operand
+        
+        //write a program that takes user input, and evaluates it and shows the result on the screen
+        //the program should only take inputs from basic calculator buttons
+        //the program should build a string from the input, and when it detects a full expression, displays the result and resets the expression
+        //a full expression is left operand, operator, right operand
+
+        //tasks: 
+        //create html skeleton of calculator 
+        //create 'click' event listeners for each button 
+        //create an object with properties (string)left, right, operator, state
+        //create a number button event listener
+        
+    </script>
+</body>
+</html>
