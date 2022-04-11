@@ -35,10 +35,11 @@
 
     </div>
     <script>
-        let eval = {
+        let ev = {
             step:1,
             left:'1',
             right:'1',
+            sign:""
         };
         let screen = document.querySelector(".screen");
         // to do: loop through and add event listeners for each Number button
@@ -50,31 +51,72 @@
         //if screen has id attribute, reset number string, else concat
         //this allows the number to reset on screen/the program can discern between l and r operands 
         numbers.forEach(n=>n.addEventListener('click', (e)=>{
-            if(eval.step == 1){
+            if(ev.step == 1){
                 if(screen.textContent == '0'){
                     screen.textContent = n.textContent;
-                    eval.left = n.textContent;
+                    ev.left = n.textContent;
                 }else {
                     screen.textContent += n.textContent;
-                    eval.left += n.textContent;
+                    ev.left += n.textContent;
                 }
-            }else{
+            }else if(ev.step == 2){
                 if(screen.hasAttribute("id")){
                     screen.textContent = n.textContent;
                     screen.removeAttribute('id');
-                    eval.right = n.textContent;
+                    ev.right = n.textContent;
                 }else{
-                    screen.textcontent +=n.textContent;
-                    eval.right+=n.textContent;
+                    screen.textContent+=n.textContent;
+                    ev.right+=n.textContent;
                 }
             } 
         }));
-        
         let ac= document.querySelector(".ac");
         ac.addEventListener("click", (e)=>{
             screen.textContent = '0';
-        })
-        let one = document.querySelector(".one button");
+            ev.step = 1;
+            ev.left = 1;
+            ev.right = 1;
+            ev.sign="";
+        });
+        //plus sign: if eval is stage 1, set .sign
+        //if eval is stage 2, evaluate & set result to eval.left, then reset eval to stage 2
+        let add = document.querySelector('.plus');
+        add.addEventListener('click', (e)=>{
+            if(ev.step == 1){
+                ev.sign = '+';
+                ev.step = 2;
+                screen.setAttribute('id','firstClick');
+            }else{
+                ev.sign = '+';
+                ev.left = evaluate();
+                screen.textContent = ev.left;
+                ev.step = 2;
+                screen.setAttribute('id','firstClick');
+            }
+        });
+        //equals sign: 2 modes: if step ==1, evaluate the current number *1, no
+        //if step ==2, evaluate the l,r using the current sign 
+        let eq = document.querySelector('.evaluate');
+        eq.addEventListener('click',(e)=>{
+            if(ev.step == 2){
+                //update display
+                let result = evaluate();
+                screen.textContent = result;
+                //reset state 
+                ev.step = 1;
+                ev.left = result;
+                ev.right = 1;
+            }
+        });
+        function evaluate(){
+            let l = Number(ev.left);
+            console.log(l);
+            let r = Number(ev.right);
+            console.log(r);
+            switch(ev.sign){
+                case '+': return l+r; 
+            }
+        }
         /*one.addEventListener('click',(e)=>{
             
             if(screen.textContent == '0'){
