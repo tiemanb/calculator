@@ -37,8 +37,8 @@
     <script>
         let ev = {
             step:1,
-            left:'1',
-            right:'1',
+            left:'0',
+            right:'0',
             sign:""
         };
         let screen = document.querySelector(".screen");
@@ -61,30 +61,90 @@
                 }
             }else if(ev.step == 2){
                 if(screen.hasAttribute("id")){
-                    screen.textContent = n.textContent;
+                    if(screen.textContent == '-'){
+                        ev.right = -1*Number(n.textContent);
+                        screen.textContent+=n.textContent;
+                    }else if(screen.textContent == '0.'){
+                        ev.right +=n.textContent;
+                        screen.textContent+=n.textContent;
+                    }else{
+                        ev.right = n.textContent;
+                        screen.textContent = n.textContent;
+
+                    }
                     screen.removeAttribute('id');
-                    ev.right = n.textContent;
                 }else{
                     screen.textContent+=n.textContent;
                     ev.right+=n.textContent;
                 }
             } 
         }));
+
+        //press before: multiplies -1 times 
+        let negate = document.querySelector('.negate');
+        negate.addEventListener('click',(e)=>{   
+            if(ev.step == 1){        
+                //state
+                ev.left = ev.left * -1;
+                //display
+                screen.textContent = ev.left;
+            }else{
+                if(ev.right == 0) {
+                    screen.textContent = '-';                    
+                }else{
+                    ev.right = ev.right*-1;
+                    screen.textContent= ev.right;
+                }
+
+            }
+        });
         let ac= document.querySelector(".ac");
         ac.addEventListener("click", (e)=>{
+            screen.classList.remove("clicked");
             screen.textContent = '0';
             ev.step = 1;
-            ev.left = 1;
-            ev.right = 1;
+            ev.left = 0;
+            ev.right = 0;
             ev.sign="";
+        });
+        
+
+        //click before or after a number, adds a decimal between
+        //there can only be one, so only add if hasID=clicked is true 
+        //tracks l and r numbers, updates state accordingly 
+        //doesn't allow you to write a decimal on screen when there already is one 
+        document.querySelector(".decimal").addEventListener('click', (e)=>{
+            if(!screen.classList.contains("clicked")){
+                console.log(screen.classList);
+                if(ev.step ==1){
+                    ev.left += '.'
+                    screen.textContent +='.';
+                }else{
+                    if(ev.right==0){
+                        ev.right='0.';
+                        screen.textContent = '0.';
+                    }else{
+                        ev.right +='.'
+                        screen.textContent +='.';
+
+                    }
+                }
+                screen.classList.add('clicked');
+                console.log(screen.classList);
+
+            }
+
+
         });
         //plus sign: if eval is stage 1, set .sign
         //if eval is stage 2, evaluate & set result to eval.left, then reset eval to stage 2
         let add = document.querySelector('.plus');
         add.addEventListener('click', (e)=>{
+            console.log(ev.right);
             if(ev.step == 1){
                 ev.sign = '+';
                 ev.step = 2;
+                screen.classList.remove("clicked");
                 screen.setAttribute('id','firstClick');
             }else{
                 ev.sign = '+';
@@ -92,20 +152,25 @@
                 screen.textContent = ev.left;
                 ev.step = 2;
                 screen.setAttribute('id','firstClick');
+                screen.classList.remove("clicked");
+                console.log(screen.classList);
+
             }
         });
         //equals sign: 2 modes: if step ==1, evaluate the current number *1, no
         //if step ==2, evaluate the l,r using the current sign 
         let eq = document.querySelector('.evaluate');
         eq.addEventListener('click',(e)=>{
+            console.log(screen.classList);
             if(ev.step == 2){
                 //update display
                 let result = evaluate();
                 screen.textContent = result;
+
                 //reset state 
                 ev.step = 1;
                 ev.left = result;
-                ev.right = 1;
+                ev.right = 0;
             }
         });
         function evaluate(){
