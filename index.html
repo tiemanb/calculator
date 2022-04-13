@@ -13,20 +13,20 @@
         <div class="keyboard">
             <div class="button ac"><button>AC</button></div>
             <div class="button negate"><button>+/-</button></div>
-            <div class="button modulo"><button>%</button></div>
-            <div class="button divide"><button>/</button></div>
+            <div class="button operator"><button>%</button></div>
+            <div class="button operator"><button>/</button></div>
             <div class="button num one"><button>1</button></div>
             <div class="button num 2"><button>2</button></div>
             <div class="button num 3"><button>3</button></div>
-            <div class="button multiply"><button>*</button></div>
+            <div class="button operator"><button>*</button></div>
             <div class="button num 4"><button>4</button></div>
             <div class="button num 5"><button>5</button></div>
             <div class="button num 6"><button>6</button></div>
-            <div class="button minus"><button>-</button></div>
+            <div class="button operator"><button>-</button></div>
             <div class="button num 7"><button>7</button></div>
             <div class="button num 8"><button>8</button></div>
             <div class="button num 9"><button>9</button></div>
-            <div class="button plus"><button>+</button></div>
+            <div class="button operator"><button>+</button></div>
             <div class="button num 0"><button>0</button></div>
             <div class="button"><button></button></div>
             <div class="button decimal"><button>.</button></div>
@@ -35,6 +35,11 @@
 
     </div>
     <script>
+        //tracking: 
+        //id = "first click"
+        //class = "clicked"
+        //issues: can place a 2nd decimal when adding a whole num to a decimal
+        //cant place a decimal 
         let ev = {
             step:1,
             left:'0',
@@ -44,7 +49,6 @@
         let screen = document.querySelector(".screen");
         // to do: loop through and add event listeners for each Number button
         let numbers = Array.from(document.getElementsByClassName('num'));
-        console.log(numbers);
     
         //adds abilituy to type numbers with UI keypad 
         //handles calculator state logic as well
@@ -113,6 +117,7 @@
         //there can only be one, so only add if hasID=clicked is true 
         //tracks l and r numbers, updates state accordingly 
         //doesn't allow you to write a decimal on screen when there already is one 
+        //when 
         document.querySelector(".decimal").addEventListener('click', (e)=>{
             if(!screen.classList.contains("clicked")){
                 console.log(screen.classList);
@@ -130,7 +135,6 @@
                     }
                 }
                 screen.classList.add('clicked');
-                console.log(screen.classList);
 
             }
 
@@ -138,35 +142,38 @@
         });
         //plus sign: if eval is stage 1, set .sign
         //if eval is stage 2, evaluate & set result to eval.left, then reset eval to stage 2
-        let add = document.querySelector('.plus');
-        add.addEventListener('click', (e)=>{
-            console.log(ev.right);
-            if(ev.step == 1){
-                ev.sign = '+';
-                ev.step = 2;
-                screen.classList.remove("clicked");
-                screen.setAttribute('id','firstClick');
-            }else{
-                ev.sign = '+';
-                ev.left = evaluate();
-                screen.textContent = ev.left;
-                ev.step = 2;
-                screen.setAttribute('id','firstClick');
-                screen.classList.remove("clicked");
-                console.log(screen.classList);
-
-            }
+       // let add = document.querySelector('.plus');
+        let operators = Array.from(document.getElementsByClassName("operator"));
+        console.log(operators);
+        operators.forEach((element)=>{
+            element.addEventListener('click', (e)=>{
+                    if(ev.step == 1){
+                        ev.sign = element.textContent;
+                        ev.step = 2;
+                        screen.classList.remove("clicked");
+                        screen.setAttribute('id','firstClick');
+                    }else{
+                        ev.sign = element.textContent;
+                        ev.left = evaluate();
+                        screen.textContent = ev.left;
+                        ev.step = 2;
+                        screen.setAttribute('id','firstClick');
+                        screen.classList.remove("clicked");
+                        ev.right = 0;
+                }
+            });
         });
+                
+        
         //equals sign: 2 modes: if step ==1, evaluate the current number *1, no
         //if step ==2, evaluate the l,r using the current sign 
         let eq = document.querySelector('.evaluate');
         eq.addEventListener('click',(e)=>{
-            console.log(screen.classList);
             if(ev.step == 2){
                 //update display
                 let result = evaluate();
                 screen.textContent = result;
-
+                //if(ev.left.includes('.')) screen.classList.add("clicked");
                 //reset state 
                 ev.step = 1;
                 ev.left = result;
@@ -180,6 +187,10 @@
             console.log(r);
             switch(ev.sign){
                 case '+': return l+r; 
+                case '/': return l/r;
+                case '%': return l%r;
+                case '*': return l*r;
+                case '-': return l-r;
             }
         }
         /*one.addEventListener('click',(e)=>{
